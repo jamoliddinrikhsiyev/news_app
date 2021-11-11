@@ -35,6 +35,9 @@ function checkData(req) {
   if (!data.title) {
     arr.push("title");
   }
+  if (!data.description) {
+    arr.push("description");
+  }
   if (!data.text) {
     arr.push("text");
   }
@@ -78,6 +81,7 @@ async function postNews(req, res, dir) {
       ]);
       let response = await pooling(queries.createNews, [
         data.title,
+        data.description,
         data.text,
         category_id[0].id,
         filename,

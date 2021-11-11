@@ -193,9 +193,10 @@ const queries = {
     INSERT INTO news(
       title,
       description,
+      text,
       category_id,
       image
-    )VALUES($1, $2, $3, $4)
+    )VALUES($1, $2, $3, $4, $5)
     RETURNING title, description, category_id, image, counter, rating, date
   `,
   addRating: `
