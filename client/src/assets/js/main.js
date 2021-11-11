@@ -45,6 +45,8 @@ query("http://192.168.0.106:8080/graphql", "allnews", 1);
 
 function renderer(array, second) {
   for (let i of array) {
+    //let news_date = i.News_date.substr()
+
     let blogBox = document.createElement("div");
 
     let firstCol = document.createElement("div");
@@ -84,6 +86,7 @@ function renderer(array, second) {
     categoryLink.textContent = i.News_category;
     dateLink.setAttribute("href", "/single");
     dateLink.textContent = i.News_date;
+    //  console.log(i.News_date);
     viewLink.setAttribute("href", "/single");
     viewLink.textContent = i.News_counter;
     views_i.classList.add("fa", "fa-eye");
@@ -101,39 +104,34 @@ function renderer(array, second) {
     blogMeta.append(head, par, firstSmall, date, views);
 
     blogBox.append(firstCol, blogMeta);
-    console.log(blogBox);
     list.prepend(blogBox);
   }
 
-  let page = pag();
+  let pages = second.pages;
 
-  while (page.next().value <= second.pages) {
+  for (let i = 1; i <= pages; i++) {
     let li = document.createElement("li");
     let li_link = document.createElement("a");
 
     li.classList.add("page-item");
     li_link.classList.add("page-link");
-    li_link.textContent = page.next().value;
+    li_link.textContent = i;
 
     li.append(li_link);
-    console.log(page.next().value);
-    pagination.append(li);
+    pagination.prepend(li);
   }
 }
 
 async function render(page) {
   let res = await query("http://192.168.0.106:8080/graphql", "allnews", page);
-  renderer(await res.data.All_news[0].results, await res.data.All_news[0].info);
+  renderer(
+    await res.data.All_news[0].results,
+    await res.data.All_news[0].info[0]
+  );
 }
 
 render(1);
 
-function* pag(arg) {
-  let index = 1;
-  while (index <= arg) {
-    yield index++;
-  }
-}
 /*
 
 

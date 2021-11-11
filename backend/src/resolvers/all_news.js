@@ -80,7 +80,10 @@ const newsResolvers = {
         return data.news_rating;
       }
     },
-    News_date: (data) => String(data.news_date),
+    News_date: (data) => {
+      console.log(String(data.news_date));
+      return String(data.news_date);
+    },
   },
 };
 
