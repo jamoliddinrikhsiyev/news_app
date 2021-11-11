@@ -1,2 +1,5 @@
 /backend/node_modules
 /client/node_modules
+/backend/src/public/img
+/backend/src/public/videos
+/client/src/assets/upload

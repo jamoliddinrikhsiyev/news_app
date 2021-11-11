@@ -81,6 +81,7 @@ CREATE TABLE news(
 CREATE TABLE rating(
     id serial NOT NULL PRIMARY KEY,
     news_id INT NOT NULL,
+    user_id INT NOT NULL,
     rating INT NOT NULL,
     date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );

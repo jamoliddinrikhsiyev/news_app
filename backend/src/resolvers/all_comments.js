@@ -1,7 +1,7 @@
 const { pooling, queries } = require("../modules/postgres.js");
 const jwt = require("jsonwebtoken");
 const { pages } = require("../lib/pages.js");
-const key = "please";
+const key = process.env.TOKEN_KEY;
 const limit = 10;
 
 const allCommentsResolvers = {

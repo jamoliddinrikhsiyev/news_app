@@ -1,7 +1,7 @@
 const { pooling, queries } = require("../modules/postgres.js");
 const { pages } = require("../lib/pages.js");
 const jwt = require("jsonwebtoken");
-const key = "please";
+const key = process.env.TOKEN_KEY;
 const limit = 10;
 
 const usersResolvers = {
@@ -13,9 +13,8 @@ const usersResolvers = {
       obj.info[0].pages = pagesCount;
       obj.info[0].count = count;
 
-      let user_id = jwt.verify(args.token, key);
-      let admin = await pooling(queries.getAdmins, [user_id.id]);
-      if (admin.length != 0) {
+      let user = jwt.verify(args.token, key);
+      if (user.admin == "true") {
         if (!args.page) {
           args.page = 1;
         }

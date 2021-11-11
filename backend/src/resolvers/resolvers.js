@@ -6,7 +6,7 @@ const { allCommentsResolvers } = require("./all_comments.js");
 const { repliesResolvers } = require("./replies.js");
 const { pages } = require("../lib/pages.js");
 const jwt = require("jsonwebtoken");
-const key = "please";
+const key = process.env.TOKEN_KEY;
 const limit = 10;
 
 const resolvers = {
@@ -113,11 +113,11 @@ const resolvers = {
       }
     },
     Token: (data) => {
-      let token = "username or password is wrong";
       if (data.id != "false") {
-        token = jwt.sign(data, key);
+        let obj = { admin: "true", id: data.id };
+        let token = jwt.sign(obj, key);
+        return token;
       }
-      return token;
     },
   },
 

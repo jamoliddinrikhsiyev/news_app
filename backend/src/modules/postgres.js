@@ -169,6 +169,15 @@ const queries = {
     )VALUES($1, $2, $3)
     RETURNING id, name
   `,
+  createNews: `
+    INSERT INTO news(
+      title,
+      description,
+      category_id,
+      image
+    )VALUES($1, $2, $3, $4)
+    RETURNING title, description, category_id, image, counter, rating, date
+  `,
 };
 
 async function pooling(request, array) {
@@ -179,8 +188,8 @@ async function pooling(request, array) {
   } else if (request && array) {
     res = await client.query(request, array);
   }
-  return await res.rows;
   client.release();
+  return await res.rows;
 }
 
 module.exports = { pooling, queries };
