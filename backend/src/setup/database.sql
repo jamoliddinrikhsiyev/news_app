@@ -49,10 +49,10 @@ CREATE DATABSE news;
 
 CREATE TABLE users(
     id serial NOT NULL PRIMARY KEY,
-    name varchar(255) UNIQUE NOT NULL,
-    password varchar(255) NOT NULL,
-    email varchar(255) UNIQUE NOT NULL,
-    img varchar(255) NOT NULL DEFAULT 'f',
+    name varchar(256) UNIQUE NOT NULL,
+    password varchar(256) NOT NULL,
+    email varchar(256) UNIQUE NOT NULL,
+    img varchar(256) NOT NULL DEFAULT 'f',
     role smallint NOT NULL DEFAULT 0,
     date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     deleted INT NOT NULL DEFAULT 0,
@@ -61,17 +61,18 @@ CREATE TABLE users(
 
 CREATE TABLE categories(
     id serial NOT NULL PRIMARY KEY,
-    name varchar(255) NOT NULL,
+    name varchar(256) NOT NULL,
     date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE news(
     id serial NOT NULL PRIMARY KEY,
-    title varchar(255) NOT NULL,
-    description varchar NOT NULL,
+    title varchar(256) NOT NULL,
+    description varchar(256) NOT NULL,
+    text varchar NOT NULL,
     counter INT NOT NULL DEFAULT 0,
     category_id INT NOT NULL,
-    image varchar(255) NOT NULL,
+    image varchar(256) NOT NULL,
     rating INT not null DEFAULT 0,
     date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     deleted INT NOT NULL DEFAULT 0,
@@ -81,7 +82,6 @@ CREATE TABLE news(
 CREATE TABLE rating(
     id serial NOT NULL PRIMARY KEY,
     news_id INT NOT NULL,
-    user_id INT NOT NULL,
     rating INT NOT NULL,
     date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );

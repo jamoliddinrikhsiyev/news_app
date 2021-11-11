@@ -104,6 +104,19 @@ const resolvers = {
         return await res;
       }
     },
+    AddRating: async (__, args) => {
+      if (args.rating > 0 && args.rating <= 5) {
+        let res = await pooling(queries.addRating, [args.newsId, args.rating]);
+        return await res;
+      }
+    },
+    AddCategory: async (__, args) => {
+      let tokenVer = jwt.verify(args.token, key);
+      if (tokenVer.admin == "true") {
+        let res = await pooling(queries.addCategory, [args.category]);
+        return await res;
+      }
+    },
   },
 
   Admin: {
@@ -172,6 +185,15 @@ const resolvers = {
         return await res;
       }
     },
+  },
+
+  NewRating: {
+    status: (data) => {
+      if (data) return 200;
+      else return 404;
+    },
+    rating: (data) => data.rating,
+    news_id: (data) => data.news_id,
   },
 };
 

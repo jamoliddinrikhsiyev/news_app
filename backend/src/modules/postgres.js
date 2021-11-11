@@ -31,6 +31,7 @@ const queries = {
       news.id AS news_id,
       news.title AS news_title,
       news.description AS news_description,
+      news.text AS news_text,
       news.counter AS news_counter,
       categories.name AS news_category_name,
       news.image AS news_image,
@@ -64,6 +65,7 @@ const queries = {
       news.id AS news_id,
       news.title AS news_title,
       news.description AS news_description,
+      news.text AS news_text,
       news.counter AS news_counter,
       categories.name AS news_category_name,
       news.image AS news_image,
@@ -72,6 +74,24 @@ const queries = {
     FROM news INNER JOIN categories
     ON categories.id = news.category_id
     WHERE category_id = $1 AND news.deleted = 0
+    ORDER BY
+      news.date DESC
+    OFFSET $2 FETCH FIRST $3 ROW ONLY
+  `,
+  getNewsbyId: `
+    SELECT
+      news.id AS news_id,
+      news.title AS news_title,
+      news.description AS news_description,
+      news.text AS news_text,
+      news.counter AS news_counter,
+      categories.name AS news_category_name,
+      news.image AS news_image,
+      news.rating AS news_rating,
+      news.date AS news_date
+    FROM news INNER JOIN categories
+    ON categories.id = news.category_id
+    WHERE news.id = $1 AND news.deleted = 0
     ORDER BY
       news.date DESC
     OFFSET $2 FETCH FIRST $3 ROW ONLY
@@ -177,6 +197,19 @@ const queries = {
       image
     )VALUES($1, $2, $3, $4)
     RETURNING title, description, category_id, image, counter, rating, date
+  `,
+  addRating: `
+    INSERT INTO rating(
+      news_id, 
+      rating
+    )VALUES($1, $2)
+    RETURNING *
+  `,
+  addCategory: `
+    INSERT INTO categories(
+      name
+    )VALUES($1)
+    RETURNING *
   `,
 };
 

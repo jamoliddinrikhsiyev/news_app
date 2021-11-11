@@ -59,6 +59,7 @@ const typeDefs = gql`
     News_id: Int!
     News_title: String!
     News_description: String!
+    News_text: String!
     News_counter: Int!
     News_category: String!
     News_image: String!
@@ -88,6 +89,8 @@ const typeDefs = gql`
     SignUp(username: String!, password: String!, email: String!): [NewUser]
     CreateComment(token: String!, news_id: Int!, message: String!): [NewComment]
     CreateReply(token: String!, comment_id: Int!, message: String!): [NewReply]
+    AddRating(newsId: Int!, rating: Int!): [NewRating]
+    AddCategory(token: String!, category: String!): [Category]
   }
 
   type Admin {
@@ -116,6 +119,12 @@ const typeDefs = gql`
     pages: Int
     next: Int
     prev: Int
+  }
+
+  type NewRating {
+    status: Int!
+    rating: Int!
+    news_id: Int!
   }
 `;
 
