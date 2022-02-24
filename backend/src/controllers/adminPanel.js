@@ -1,23 +1,11 @@
 const { pooling, queries } = require("../modules/postgres.js");
 const path = require("path");
+const fs = require("fs");
 const jwt = require("jsonwebtoken");
+const uniqueFilename = require("unique-filename");
 const key = "please";
 
-let imgName = "img_";
-let imgCount = 1;
-
-function adminPanelApis(req, res, dir) {
-  console.log(req.files.file);
-  let filename = `img/${imgName}${imgCount}.jpg`;
-  req.files.file.mv(`${dir}/public/${filename}`, (err) => {
-    if (err) {
-      return res.status(500).send(err);
-    } else {
-      imgCount++;
-      res.status(200).send(JSON.stringify({ file: filename }));
-    }
-  });
-}
+function adminPanelApis(req, res) {}
 
 //post title
 //post text
@@ -51,43 +39,55 @@ function checkData(req) {
 }
 
 async function postNews(req, res, dir) {
-  let data = req.body;
-  let arr = checkData(req);
-  if (arr.length != 0) {
-    let send = arr.join(",");
-    return res.status(404).json(`${send} is required`);
-  } else if (arr.length == 0) {
-    let user;
-    try {
-      user = jwt.verify(data.token, key);
-    } catch (err) {
-      console.log(err);
-      return res.status(404).send("the token is wrong");
-    }
-    let myRe = /image\/.+/g;
-    let img = req.files.image;
-    if (user.admin == "true" && img.mimetype.match(myRe).length != 0) {
-      let mimetype = img.name.match(/\.\w+/g);
-      let filename = `img/${imgName}${imgCount}${mimetype}`;
-      img.mv(`${dir}/public/${filename}`, (err) => {
-        if (err) {
-          return res.status(500).send(err);
-        } else {
-          imgCount++;
+  try {
+    let insertData = [];
+    let arr = [];
+    let data = req.body;
+    let files = req.files;
+
+    if (data.header && data.description && data.data && data.category) {
+      insertData[0] = data.header;
+      insertData[1] = data.description;
+      let text = JSON.parse(data.data);
+      for (let i = 1; i <= data.all; i++) {
+        let obj = {};
+        if (text[i]) {
+          obj.text = text[i];
+          arr.push(obj);
+        } else if (files[i]) {
+          console.log(files[i], files[i].mimetype);
+          let t = files[i].mimetype;
+          let type = t.slice(t.indexOf("/") + 1);
+          let filePath = path.join(process.cwd(), "src", "assets", "files");
+          let filename = `${uniqueFilename(filePath)}.${type}`;
+          //D:\projects\nodejs\news_app\backend\src\assets\files\34d03a23.png
+          await files[i].mv(filename, (err) => {
+            if (err) console.log(err);
+          });
+          let filenamearr = filename.split(/\\/);
+          filename = `/${filenamearr[filenamearr.length - 2]}/${
+            filenamearr[filenamearr.length - 1]
+          }`;
+          // console.log("the filename: ", filename);
+          obj.image = filename;
+          arr.push(obj);
         }
-      });
-      let category_id = await pooling(queries.getCategotybyName, [
-        data.category,
-      ]);
-      let response = await pooling(queries.createNews, [
-        data.title,
-        data.description,
-        data.text,
-        category_id[0].id,
-        filename,
-      ]);
-      res.status(200).send(JSON.stringify(response[0]));
+      }
+      insertData[2] = JSON.stringify({ array: arr });
+      insertData[3] = Number(data.category);
+      console.log(insertData);
+      let response = await pooling(queries.createNews, insertData);
+      console.log(response);
+      if (response) {
+        res.status(200).send(await response);
+      } else if (!response) {
+        res.status(400).send("error");
+      }
+    } else {
+      res.status(400).send("error");
     }
+  } catch (err) {
+    console.log("error", err);
   }
 }
 

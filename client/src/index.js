@@ -3,6 +3,11 @@ const express = require("express");
 const path = require("path");
 const { PORT, host } = require("./config.js");
 const app = express();
+const os = require("os");
+let uniqueFilename = require("unique-filename");
+
+let randomTmpfile = uniqueFilename(path.join(__dirname, "assets", "upload"));
+console.log(randomTmpfile);
 
 app.use(express.static(path.join(__dirname, "assets")));
 
@@ -32,6 +37,10 @@ app.get("/contact", (req, res) => {
 
 app.get("/author", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "author.html"));
+});
+
+app.get("/news/:id", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "single.html"));
 });
 
 app.listen(PORT, () =>

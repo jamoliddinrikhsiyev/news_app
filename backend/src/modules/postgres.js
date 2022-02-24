@@ -34,7 +34,6 @@ const queries = {
       news.text AS news_text,
       news.counter AS news_counter,
       categories.name AS news_category_name,
-      news.image AS news_image,
       news.rating AS news_rating,
       news.date AS news_date
     FROM news INNER JOIN categories
@@ -68,7 +67,6 @@ const queries = {
       news.text AS news_text,
       news.counter AS news_counter,
       categories.name AS news_category_name,
-      news.image AS news_image,
       news.rating AS news_rating,
       news.date AS news_date
     FROM news INNER JOIN categories
@@ -86,15 +84,11 @@ const queries = {
       news.text AS news_text,
       news.counter AS news_counter,
       categories.name AS news_category_name,
-      news.image AS news_image,
       news.rating AS news_rating,
       news.date AS news_date
     FROM news INNER JOIN categories
     ON categories.id = news.category_id
     WHERE news.id = $1 AND news.deleted = 0
-    ORDER BY
-      news.date DESC
-    OFFSET $2 FETCH FIRST $3 ROW ONLY
   `,
   getCategotybyName: `
     SELECT id FROM categories
@@ -194,10 +188,9 @@ const queries = {
       title,
       description,
       text,
-      category_id,
-      image
-    )VALUES($1, $2, $3, $4, $5)
-    RETURNING title, description, category_id, image, counter, rating, date
+      category_id
+    )VALUES($1, $2, $3, $4)
+    RETURNING title, description, category_id, counter, rating, date
   `,
   addRating: `
     INSERT INTO rating(

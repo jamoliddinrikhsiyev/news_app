@@ -45,6 +45,12 @@ const newsResolvers = {
 
       return arr;
     },
+    News: async (_, args) => {
+      console.log(args);
+      let res = await pooling(queries.getNewsbyId, [args.id]);
+      console.log(await res);
+      return res;
+    },
   },
 
   AllNews: {
@@ -63,10 +69,9 @@ const newsResolvers = {
     News_id: (data) => data.news_id,
     News_title: (data) => data.news_title,
     News_description: (data) => data.news_description,
-    News_text: (data) => data.news_text,
+    News_text: (data) => JSON.stringify(data.news_text),
     News_counter: (data) => data.news_counter,
     News_category: (data) => data.news_category_name,
-    News_image: (data) => data.news_image,
     News_rating: async (data) => {
       let res = await pooling(queries.getAllRating, [data.id]);
       if (res.length != 0) {

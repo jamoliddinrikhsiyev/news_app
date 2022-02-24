@@ -19,6 +19,7 @@ const resolvers = {
     users: usersResolvers.Query.users,
     Categories: categoryResolvers.Query.Categories,
     All_news: newsResolvers.Query.All_news,
+    News: newsResolvers.Query.News,
     All_Comments: allCommentsResolvers.Query.All_Comments,
     All_Replies: repliesResolvers.Query.All_Replies,
   },

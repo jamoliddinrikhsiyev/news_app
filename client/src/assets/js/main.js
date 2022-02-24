@@ -24,7 +24,7 @@ async function query(url, route, page, args) {
                     News_id
                     News_title
                     News_description
-                    News_image
+                    News_text
                     News_counter
                     News_category
                     News_date
@@ -41,11 +41,15 @@ async function query(url, route, page, args) {
   return await res.json();
 }
 
-query("http://192.168.0.106:8080/graphql", "allnews", 1);
+query("http://localhost:8080/graphql", "allnews", 1);
 
 function renderer(array, second) {
-  for (let i of array) {
-    //let news_date = i.News_date.substr()
+  for (let i = 0; i < array.length; i++) {
+    console.log(array[i]);
+    //let news_date =array[i].News_date.substr()
+    let news_body = JSON.parse(array[i].News_text);
+    let img = news_body.array.find((item) => item.image);
+    console.log(img);
 
     let blogBox = document.createElement("div");
 
@@ -71,24 +75,24 @@ function renderer(array, second) {
     firstCol.classList.add("col-md-4");
     postMedia.classList.add("post-media");
     firstLink.setAttribute("href", "/single");
-    firstImg.setAttribute("src", `http://localhost:8080/${i.News_image}`);
+    firstImg.setAttribute("src", `http://localhost:8080/${img.image}`);
     firstImg.setAttribute("alt", "aa");
     firstImg.classList.add("img-fluid");
     hovereffect.classList.add("hovereffect");
 
     blogMeta.classList.add("blog-meta", "big-meta", "col-md-8");
-    secondLink.setAttribute("href", "/single");
-    secondLink.textContent = i.News_title;
-    par.textContent = i.News_description;
+    secondLink.setAttribute("href", `/news/${array[i].News_id}`);
+    secondLink.textContent = array[i].News_title;
+    par.textContent = array[i].News_description;
     firstSmall.classList.add("firstsmall");
     categoryLink.classList.add("bg-orange");
     categoryLink.setAttribute("href", "/categoryfirst");
-    categoryLink.textContent = i.News_category;
+    categoryLink.textContent = array[i].News_category;
     dateLink.setAttribute("href", "/single");
-    dateLink.textContent = i.News_date;
+    dateLink.textContent = array[i].News_date;
     //  console.log(i.News_date);
     viewLink.setAttribute("href", "/single");
-    viewLink.textContent = i.News_counter;
+    viewLink.textContent = array[i].News_counter;
     views_i.classList.add("fa", "fa-eye");
 
     firstLink.prepend(hovereffect, firstImg);
@@ -104,7 +108,7 @@ function renderer(array, second) {
     blogMeta.append(head, par, firstSmall, date, views);
 
     blogBox.append(firstCol, blogMeta);
-    list.prepend(blogBox);
+    list.append(blogBox);
   }
 
   let pages = second.pages;
@@ -123,7 +127,8 @@ function renderer(array, second) {
 }
 
 async function render(page) {
-  let res = await query("http://192.168.0.106:8080/graphql", "allnews", page);
+  let res = await query("http://localhost:8080/graphql", "allnews", page);
+  console.log(await res.data.All_news[0].results);
   renderer(
     await res.data.All_news[0].results,
     await res.data.All_news[0].info[0]

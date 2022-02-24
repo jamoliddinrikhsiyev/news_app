@@ -12,6 +12,7 @@ const typeDefs = gql`
     All_news(category: String, page: Int): [AllNews]
     All_Comments(news_id: Int!, page: Int): [AllComments]
     All_Replies(comments_id: Int!, page: Int): [AllReplies]
+    News(id: Int!): [News]
   }
 
   type Users {
@@ -62,7 +63,6 @@ const typeDefs = gql`
     News_text: String!
     News_counter: Int!
     News_category: String!
-    News_image: String!
     News_rating: Int!
     News_date: String!
   }

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/img/logo.png" type="image/x-icon" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script defer src="/js/main.js"></script>
+    <title>News</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="context"></div>
+      <form class="form">
+        <label class="head">
+          <input type="text" class="page_head" placeholder="Enter the header" />
+          <button class="add_header" type="button">Add header</button>
+        </label>
+        <label class="description">
+          <input
+            type="text"
+            class="page_description"
+            placeholder="Enter the description"
+          />
+          <button class="add_desc" type="button">Add description</button>
+        </label>
+        <div class="bottom_section">
+          <label class="text_label">
+            <textarea
+              cols="30"
+              rows="10"
+              placeholder="Enter text..."
+            ></textarea>
+          </label>
+          <div class="wrapper">
+            <label class="file_label">
+              <input type="file" class="file_input" accept="image/*" />
+              <p class="select_file">Add Image....</p>
+            </label>
+            <select class="select" placeholder="Select category">
+              <option value="1">Uzbekistan</option>
+              <option value="2">World</option>
+              <option value="3">Sport</option>
+              <option value="4">Public</option>
+            </select>
+            <button type="button" class="add_to_page">Add text</button>
+            <button type="submit" class="submit">Save Page</button>
+            <button type="button" class="reset">Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

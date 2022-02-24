@@ -28,13 +28,13 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "assets")));
 app.use(fileupload());
 server.applyMiddleware({ app });
 
 /*-- routes --*/
 app.get("/", (req, res) => {
-  res.send("<h1 style='color: red;'>hello world</h1>");
+  res.sendFile(path.join(__dirname, "views/index.html"));
 });
 
 app.post("/api/adminpanel/postnews", (req, res) => {
