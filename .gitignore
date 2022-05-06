@@ -1,5 +1,9 @@
 /backend/node_modules
 /client/node_modules
-/backend/src/public/img
-/backend/src/public/videos
+
+/backend/src/assets/img
+/backend/src/assets/videos
 /client/src/assets/upload
+
+/client/package-lock.json
+/backend/package-lock.json
