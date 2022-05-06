@@ -48,6 +48,7 @@ async function postNews(req, res, dir) {
     if (data.header && data.description && data.data && data.category) {
       insertData[0] = data.header;
       insertData[1] = data.description;
+      // console.log(data.data);
       let text = JSON.parse(data.data);
       for (let i = 1; i <= data.all; i++) {
         let obj = {};
@@ -55,19 +56,23 @@ async function postNews(req, res, dir) {
           obj.text = text[i];
           arr.push(obj);
         } else if (files[i]) {
-          console.log(files[i], files[i].mimetype);
+          // console.log(files[i], files[i].mimetype);
           let t = files[i].mimetype;
           let type = t.slice(t.indexOf("/") + 1);
-          let filePath = path.join(process.cwd(), "src", "assets", "files");
+          let filePath = "/files";
           let filename = `${uniqueFilename(filePath)}.${type}`;
+          // console.log(filename);
           //D:\projects\nodejs\news_app\backend\src\assets\files\34d03a23.png
-          await files[i].mv(filename, (err) => {
-            if (err) console.log(err);
-          });
-          let filenamearr = filename.split(/\\/);
-          filename = `/${filenamearr[filenamearr.length - 2]}/${
-            filenamearr[filenamearr.length - 1]
-          }`;
+          await files[i].mv(
+            path.join(process.cwd(), "src", "assets", filename),
+            (err) => {
+              if (err) console.log(err);
+            }
+          );
+          // let filenamearr = filename.split(/\\/);
+          // filename = `/${filenamearr[filenamearr.length - 2]}/${
+          //   filenamearr[filenamearr.length - 1]
+          // }`;
           // console.log("the filename: ", filename);
           obj.image = filename;
           arr.push(obj);
@@ -92,3 +97,5 @@ async function postNews(req, res, dir) {
 }
 
 module.exports = { postNews, adminPanelApis };
+
+//'{"array":[{ "text" : "afdasdfasfdsafd" }, {"image": "http://localhost:8080/files/bc2082c5.jpeg"}]}'
